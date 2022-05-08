@@ -9,6 +9,7 @@ const { hash } = require("bcrypt");
 const imageHash = require('node-image-hash');
 const download = require('download');
 const fs = require("fs");
+const { urlencoded } = require("body-parser");
 
 
 //**************GET FUNCTIONS***************** */
@@ -249,6 +250,8 @@ const putUrl = async (docArray) => {
 
         // Path at which image will get downloaded
         const filePath = './temp_image/';
+
+        console.log(url);
         
         await download(url,filePath)
         .then(() => {
@@ -270,7 +273,7 @@ const putUrl = async (docArray) => {
             console.log(hash.type); // 'blockhash8'
         });
 
-
+        console.log(documentHash === docArray[i].documentHash)
         if(documentHash === docArray[i].documentHash){
             console.log("if");
             docArray[i].documentUrl = url;
