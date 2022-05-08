@@ -7,6 +7,7 @@ const { buildWallet } = require('./AppUtils')
 const { BlobServiceClient, BlobSASPermissions } = require('@azure/storage-blob');
 const { hash } = require("bcrypt");
 const imageHash = require('node-image-hash');
+const download = require('download');
 
 //**************GET FUNCTIONS***************** */
 
@@ -242,16 +243,28 @@ const getDocumentUrls = async (applicantId, documentId) => {
 
 const putUrl = async (docArray) => {
     for(let i = 0; i < docArray.length; i++){
-        docArray[i].documentUrl = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
+        url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
 
-/*        let documentHash;
+        // Path at which image will get downloaded
+        const filePath = './temp_image/';
+        
+        download(url,filePath)
+        .then(() => {
+            console.log('Download Completed');
+        });
+        const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", docArray[i].documentId));
+        let documentHash;
+
+
         await imageHash
-            .hash(url, 8, 'hex')
+            .hash(fBuffer, 8, 'hex')
             .then((hash) => {
             documentHash = hash.hash; // '83c3d381c38985a5'
             console.log(documentHash);
             console.log(hash.type); // 'blockhash8'
         });
+
+
         if(documentHash === docArray[i].documentHash){
             console.log("if");
             docArray[i].documentUrl = url;
@@ -259,7 +272,7 @@ const putUrl = async (docArray) => {
         else{
             console.log("else")
             docArray[i].documentUrl = "";
-        }*/
+        }
     }
     return docArray;
 }
