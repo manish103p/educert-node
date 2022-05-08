@@ -273,6 +273,8 @@ const putUrl = async (docArray) => {
             console.log(hash.type); // 'blockhash8'
         });
 
+        fs.unlinkSync(fBuffer);
+
         console.log(documentHash === docArray[i].documentHash)
         console.log(documentHash);
         console.log(docArray[i].documentHash);
