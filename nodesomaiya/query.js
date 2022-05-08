@@ -274,6 +274,9 @@ const putUrl = async (docArray) => {
         });
 
         console.log(documentHash === docArray[i].documentHash)
+        console.log(documentHash);
+        console.log(docArray[i].documentHash);
+        console.log(documentHash == docArray[i].documentHash)
         if(documentHash === docArray[i].documentHash){
             console.log("if");
             docArray[i].documentUrl = url;
