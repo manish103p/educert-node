@@ -8,6 +8,8 @@ const { BlobServiceClient, BlobSASPermissions } = require('@azure/storage-blob')
 const { hash } = require("bcrypt");
 const imageHash = require('node-image-hash');
 const download = require('download');
+const fs = require("fs");
+
 
 
 //**************GET FUNCTIONS***************** */
@@ -242,44 +244,50 @@ const getDocumentUrls = async (applicantId, documentId) => {
     return documentUrl;
 }
 
-const putUrl = async (docArray) => {
-    for(let i = 0; i < docArray.length; i++){
-        url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
+const putUrl = async (docArray) => {    for(let i = 0; i < docArray.length; i++){
+    url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
 
-        // Path at which image will get downloaded
-        const filePath = './temp_image/';
-        
-        await download(url,filePath)
-        .then(() => {
-            console.log('Download Completed');
-        });
+    // Path at which image will get downloaded
+    const filePath = './temp_image/';
 
-        let filename = "";
-        filename = filename.concat(docArray[i].documentId, ".png");
+    console.log(url);
+    
+    await download(url,filePath)
+    .then(() => {
+        console.log('Download Completed');
+    });
 
-        const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
-        let documentHash;
+    let filename = "";
+    filename = filename.concat(docArray[i].documentId, ".png");
 
-
-        await imageHash
-            .hash(fBuffer, 8, 'hex')
-            .then((hash) => {
-            documentHash = hash.hash; // '83c3d381c38985a5'
-            console.log(documentHash);
-            console.log(hash.type); // 'blockhash8'
-        });
+    const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
+    let documentHash;
 
 
-        if(documentHash === docArray[i].documentHash){
-            console.log("if");
-            docArray[i].documentUrl = url;
-        }
-        else{
-            console.log("else")
-            docArray[i].documentUrl = "";
-        }
+    await imageHash
+        .hash(fBuffer, 8, 'hex')
+        .then((hash) => {
+        documentHash = hash.hash; // '83c3d381c38985a5'
+        console.log(documentHash);
+        console.log(hash.type); // 'blockhash8'
+    });
+
+    fs.unlinkSync(fBuffer);
+
+    console.log(documentHash === docArray[i].documentHash)
+    console.log(documentHash);
+    console.log(docArray[i].documentHash);
+    console.log(documentHash == docArray[i].documentHash)
+    if(documentHash === docArray[i].documentHash){
+        console.log("if");
+        docArray[i].documentUrl = url;
     }
-    return docArray;
+    else{
+        console.log("else")
+        docArray[i].documentUrl = "";
+    }
+}
+return docArray;
 }
 
 // TODO
