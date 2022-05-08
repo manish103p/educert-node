@@ -8,6 +8,7 @@ const { BlobServiceClient, BlobSASPermissions } = require('@azure/storage-blob')
 const { hash } = require("bcrypt");
 const imageHash = require('node-image-hash');
 const download = require('download');
+const fs = require("fs");
 
 
 //**************GET FUNCTIONS***************** */
@@ -253,6 +254,7 @@ const putUrl = async (docArray) => {
         .then(() => {
             console.log('Download Completed');
         });
+
         const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", docArray[i].documentId));
         let documentHash;
 
