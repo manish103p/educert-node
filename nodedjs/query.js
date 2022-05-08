@@ -249,10 +249,12 @@ const putUrl = async (docArray) => {
         // Path at which image will get downloaded
         const filePath = './temp_image/';
         
-        download(url,filePath)
+        await download(url,filePath)
         .then(() => {
             console.log('Download Completed');
         });
+
+
         const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", docArray[i].documentId));
         let documentHash;
 
