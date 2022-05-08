@@ -254,8 +254,10 @@ const putUrl = async (docArray) => {
             console.log('Download Completed');
         });
 
+        let filename = "";
+        filename = filename.concat(docArray[i].documentId, ".png");
 
-        const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", docArray[i].documentId));
+        const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
         let documentHash;
 
 
