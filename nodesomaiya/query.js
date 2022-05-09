@@ -265,11 +265,11 @@ const putUrl = async (docArray) => {
             let filename = "";
             filename = filename.concat(docArray[i].documentId, ".png");
 
-            const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
+            // const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename) );
 
 
             await imageHash
-                .hash(fBuffer, 8, 'hex')
+                .hash(path.join(__dirname,"temp_image", filename), 8, 'hex')
                 .then((hash) => {
                 documentHash = hash.hash; // '83c3d381c38985a5'
                 console.log(documentHash);
