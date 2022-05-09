@@ -247,6 +247,8 @@ const getDocumentUrls = async (applicantId, documentId) => {
 const putUrl = async (docArray) => {
     for(let i = 0; i < docArray.length; i++){
         let everythingOk = true;
+        let documentHash;
+
         try{
             url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
                     // Path at which image will get downloaded
@@ -263,7 +265,6 @@ const putUrl = async (docArray) => {
             filename = filename.concat(docArray[i].documentId, ".png");
 
             const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
-            let documentHash;
 
 
             await imageHash
