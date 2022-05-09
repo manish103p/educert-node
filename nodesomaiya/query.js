@@ -246,40 +246,48 @@ const getDocumentUrls = async (applicantId, documentId) => {
 
 const putUrl = async (docArray) => {
     for(let i = 0; i < docArray.length; i++){
-        url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
+        let everythingOk = true;
+        try{
+            url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
+                    // Path at which image will get downloaded
+            const filePath = './temp_image/';
+
+            console.log(url);
+            
+            await download(url,filePath)
+            .then(() => {
+                console.log('Download Completed');
+            });
+
+            let filename = "";
+            filename = filename.concat(docArray[i].documentId, ".png");
+
+            const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
+            let documentHash;
+
+
+            await imageHash
+                .hash(fBuffer, 8, 'hex')
+                .then((hash) => {
+                documentHash = hash.hash; // '83c3d381c38985a5'
+                console.log(documentHash);
+                console.log(hash.type); // 'blockhash8'
+            });
+
+            fs.unlinkSync(fBuffer);
+
+        }catch(error){
+            everythingOk = false;
+        }
 
         // Path at which image will get downloaded
-        const filePath = './temp_image/';
-
-        console.log(url);
-        
-        await download(url,filePath)
-        .then(() => {
-            console.log('Download Completed');
-        });
-
-        let filename = "";
-        filename = filename.concat(docArray[i].documentId, ".png");
-
-        const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename));
-        let documentHash;
 
 
-        await imageHash
-            .hash(fBuffer, 8, 'hex')
-            .then((hash) => {
-            documentHash = hash.hash; // '83c3d381c38985a5'
-            console.log(documentHash);
-            console.log(hash.type); // 'blockhash8'
-        });
-
-        fs.unlinkSync(fBuffer);
-
-        console.log(documentHash === docArray[i].documentHash)
-        console.log(documentHash);
-        console.log(docArray[i].documentHash);
-        console.log(documentHash == docArray[i].documentHash)
-        if(documentHash === docArray[i].documentHash){
+        // console.log(documentHash === docArray[i].documentHash)
+        // console.log(documentHash);
+        // console.log(docArray[i].documentHash);
+        // console.log(documentHash == docArray[i].documentHash)
+        if(documentHash === docArray[i].documentHash && everythingOk){
             console.log("if");
             docArray[i].documentUrl = url;
         }
