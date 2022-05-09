@@ -279,7 +279,7 @@ const putUrl = async (docArray) => {
             fs.unlinkSync(fBuffer);
 
         }catch(error){
-            console.log(error.message);
+            console.log(error);
 
             everythingOk = false;
         }
