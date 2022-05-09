@@ -248,6 +248,7 @@ const putUrl = async (docArray) => {
     for(let i = 0; i < docArray.length; i++){
         let everythingOk = true;
         let documentHash;
+        let url;
 
         try{
             url  = await getDocumentUrls(docArray[i].applicantId, docArray[i].documentId);
@@ -287,7 +288,8 @@ const putUrl = async (docArray) => {
         // console.log(documentHash === docArray[i].documentHash)
         // console.log(documentHash);
         // console.log(docArray[i].documentHash);
-        // console.log(documentHash == docArray[i].documentHash)
+        console.log(documentHash === docArray[i].documentHash);
+        console.log(everythingOk);
         if(documentHash === docArray[i].documentHash && everythingOk){
             console.log("if");
             docArray[i].documentUrl = url;
