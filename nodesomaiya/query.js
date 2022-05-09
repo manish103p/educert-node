@@ -265,7 +265,7 @@ const putUrl = async (docArray) => {
             let filename = "";
             filename = filename.concat(docArray[i].documentId, ".png");
 
-            // const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename) );
+            const fBuffer = fs.readFileSync(path.join(__dirname,"temp_image", filename) );
 
 
             await imageHash
