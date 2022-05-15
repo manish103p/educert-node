@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  mongodbsomaiya:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - /root/node-api-contract/mongo/database:/data/db
+
+  mongodbdjs:
+    image: mongo
+    ports:
+      - 27018:27017
+    volumes:
+      - /root/node-api-contract/mongo/databasedjs:/data/db
+
